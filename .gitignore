@@ -1,0 +1,8 @@
+.vscode/*
+Include/*
+Lib/*
+Scripts/*
+tcl/*
+app/static/*
+*.db
+*.pyc
