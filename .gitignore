@@ -9,3 +9,7 @@ app/static/*
 *.spec
 build/*
 dist/*
+bin/*
+include/*
+lib/*
+
