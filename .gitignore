@@ -6,3 +6,6 @@ tcl/*
 app/static/*
 *.db
 *.pyc
+*.spec
+build/*
+dist/*

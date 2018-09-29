@@ -1,32 +1,61 @@
 import requests
 import json
 from PIL import ImageGrab, Image
-import clipboard
+import clipboard, pickle
+import time, os
 
-def upload():
-    # 从剪切板获取图片上传
-    url = 'http://127.0.0.1:18800/'
+class Client():
+    """获取token"""
+    def __init__(self):
+        self.url = 'http://127.0.0.1:18800/'
+        self.headers = {'Content-Type': 'application/json'}
+        self.payload = {'username':'demo', 'password':'demo'}
+        self.pkiFile = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'token.pki')
 
-    headers = {'Content-Type': 'application/json'}
+    def getToken(self):
+        # 获取token
+        token = {}
+        r = requests.post(self.url,headers=self.headers, data=json.dumps(self.payload))
+        t = r.text 
+        timestamp = int(time.time())
+        token.setdefault('token', t)
+        token.setdefault('timestamp', timestamp)
+        with open(self.pkiFile, 'wb') as f:
+            pickle.dump(token,f)
 
-    payload = {'username':'demo', 'password':'demo'}
+    def showToken(self):
+        # 从文件获取token
+        with open(self.pkiFile, 'rb') as f:
+            t = pickle.load(f)
+            return t.get('token')
 
-    r = requests.post(url,headers=headers, data=json.dumps(payload))
+    def tokenExpired(self):
+        # 验证是否过期
+        with open(self.pkiFile, 'rb') as f:
+            token = pickle.load(f)
+        if int(time.time()) - token.get('timestamp') > 600:
+            return True
+        else:
+            return False
 
-    token = r.text 
 
-    upload_url = 'http://127.0.0.1:18800/upload'
+    def upload(self):
+        # 从剪切板获取图片上传
 
-    files = {'image001': open(r'd:/tmp0001.jpg', 'rb')}
-
-    h1 = {'token':token}
-
-    ru = requests.post(upload_url, headers=h1, files=files)
-
-    clipboard.copy(ru.text)
+        upload_url = self.url + 'upload'
+        files = {'image001': open(r'd:/tmp0001.jpg', 'rb')}
+        h1 = {'token':token}
+        ru = requests.post(upload_url, headers=h1, files=files)
+        clipboard.copy(ru.text)
 
 if __name__ == '__main__':
     im= ImageGrab.grabclipboard()
     if isinstance(im, Image.Image):
+        print("剪切板有图片")
+        c = Client()
+        if c.tokenExpired():
+            print('token过期,重新获取')
+            c.getToken()
+        token = c.showToken()
         im.save(r'd:/tmp0001.jpg')
-        upload()
+        c.upload()
