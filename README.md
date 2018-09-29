@@ -5,6 +5,8 @@
 > 把剪切板里的图片上传到图床 返回图片地址  
 
 
+![](app/demo.gif)
+
 
 * 启动服务  
 
@@ -12,6 +14,10 @@
 
 * 修改文件路径  
 
+  client.exe需要使用pyinstaller打包  
+
+  `pyinstaller -F client.py`  
+  
   根据实际情况修改 `截图上传.ahk` 里面 client.exe的路径, 以及自定义快捷键
 
 * 上传图片

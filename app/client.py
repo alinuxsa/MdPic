@@ -31,6 +31,8 @@ class Client():
 
     def tokenExpired(self):
         # 验证是否过期
+        if not os.path.exists(self.pkiFile):
+            self.getToken()
         with open(self.pkiFile, 'rb') as f:
             token = pickle.load(f)
         if int(time.time()) - token.get('timestamp') > 600:
