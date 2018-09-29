@@ -104,7 +104,7 @@ def upload():
                 filename = gen_filename(upload_file.filename)
                 print("获取到filename {}".format(filename))
                 upload_file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
-                ext_link = url_for('static', filename=filename,  _external=True)
+                ext_link = url_for('static', filename=filename,  _external=True, _scheme='https')
                 return ext_link
         else:
             msg = {"msg":"invalid token"}
@@ -114,5 +114,5 @@ def upload():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=18800, debug=False)
+    app.run(host='127.0.0.1', port=18800, debug=False)
 
