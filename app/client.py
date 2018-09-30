@@ -3,13 +3,16 @@ import json
 from PIL import ImageGrab, Image
 import clipboard, pickle
 import time, os
+from app.config import config
 
 class Client():
     """获取token"""
     def __init__(self):
-        self.url = 'http://127.0.0.1:18800/'
+        self.url = config.get('url', None)
+        self.username = config.get('username', None)
+        self.password = config.get('password', None)
         self.headers = {'Content-Type': 'application/json'}
-        self.payload = {'username':'demo', 'password':'demo'}
+        self.payload = {'username':self.username, 'password':self.password}
         self.pkiFile = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'token.pki')
 
     def getToken(self):
