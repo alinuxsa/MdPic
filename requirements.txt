@@ -22,7 +22,7 @@ PyInstaller==3.4
 pylint==2.1.1
 pyperclip==1.7.0
 pywin32-ctypes==0.2.0
-requests==2.19.1
+requests==2.20.1
 six==1.11.0
 SQLAlchemy==1.2.12
 typed-ast==1.1.0
